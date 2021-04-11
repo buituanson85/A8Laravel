@@ -13,11 +13,11 @@ class HomeController extends Controller
 {
     public function index(){
         $brands = Brand::get();
-        $categoriess = Category::take(5)->get();
-        $products = Product::all();
+        $categories_table = Category::take(5)->get();
+        $products_table = Product::all();
         $sliderBanner = SliderBanners::all();
 
-        return view('pages.home', compact('brands', 'categoriess','products', 'sliderBanner'));
+        return view('pages.home', compact('brands', 'categories_table','products_table', 'sliderBanner'));
     }
 
     public function profile($id){

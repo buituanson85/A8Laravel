@@ -43,12 +43,6 @@ class AppServiceProvider extends ServiceProvider
         $bras = Brand::where('parent', 0)->get();
         $sliders = Slider::all();
 
-//        $orders_details = DB::table('order_details')
-//            ->join('orders', 'orders.order_id ', '=' , 'order_details.order_id')
-//            ->select('orders.*','order_details.*')
-//            ->where('orders.customer_id', 1)
-//            ->first();
-
         View::share(array('users'=>$users));
         View::share(array('roles'=>$roles));
         View::share('categories', $categories);//461

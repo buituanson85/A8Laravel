@@ -18,10 +18,10 @@
             @endphp
         @endif
         <a href="javascript:void(0)" class="link-to">
-                                            <span class="icon-qty-combine">
-                                                <i class="icon-cart-mini biolife-icon"></i>
-                                                <span class="qty">{{ $count }}</span>
-                                            </span>
+            <span class="icon-qty-combine">
+                <i class="icon-cart-mini biolife-icon"></i>
+                <span class="qty">{{ $count }}</span>
+            </span>
             <span class="title">My Cart -</span>
             <span class="sub-total">
                 @if(Session::get('cart'))
@@ -55,7 +55,7 @@
                             </div>
                             <div class="action">
                                 <a href="#" class="edit"><i class="fa fa-pencil" aria-hidden="true"></i></a>
-                                <a href="#" class="remove"><i class="fa fa-trash-o" aria-hidden="true"></i></a>
+                                <a href="{{ url('/delete_cart_ajax/'.$minicart['session_id']) }}" class="remove"><i class="fa fa-trash-o" aria-hidden="true"></i></a>
                             </div>
                         </div>
                     </li>

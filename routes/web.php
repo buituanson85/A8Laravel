@@ -68,13 +68,59 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function (){
 //for admin
 Route::middleware(['auth:sanctum', 'verified','authadmin'])->group(function (){
     Route::resource('/dashboard', DashboardController::class);
-    //Admin
-    Route::resource('/dashboards/permissions', PermissionController::class);
-    Route::resource('/dashboards/roles', RoleController::class);
-    Route::resource('/dashboards/roles-permissions', RoleAddPermissionController::class);
 
-    //users
-    Route::resource('/dashboards/users',UserController::class);
+    //SupperAdmin
+    Route::middleware(['auth:sanctum', 'verified','authsupperadmin'])->group(function (){
+        //Admin
+        Route::resource('/dashboards/permissions', PermissionController::class);
+        Route::resource('/dashboards/roles', RoleController::class);
+        Route::resource('/dashboards/roles-permissions', RoleAddPermissionController::class);
+
+        //users
+        Route::resource('/dashboards/users',UserController::class);
+    });
+    //Staff
+    Route::middleware(['auth:sanctum', 'verified','authstaff'])->group(function (){
+        //category
+        Route::resource('/dashboards/categories', CategoryController::class);
+        Route::get('/dashboards/categoryunlock/{id}', [CategoryController::class, 'unlockstatustcategory'])->name('admin.unlockstatustcategory');
+        Route::get('/dashboards/categorylock/{id}', [CategoryController::class, 'lockstatustcategory'])->name('admin.lockstatustcategory');
+
+        //brand
+        Route::resource('/dashboards/brands',BrandController::class);
+        Route::get('/dashboards/brandunlock/{id}', [BrandController::class, 'unlockstatustbrand'])->name('admin.unlockstatustbrand');
+        Route::get('/dashboards/brandlock/{id}', [BrandController::class, 'lockstatustbrand'])->name('admin.lockstatustbrand');
+
+        //product
+        Route::resource('/dashboards/products', ProductController::class);
+        Route::get('/dashboards/productunlock/{id}', [ProductController::class, 'unlockstatustproduct'])->name('admin.unlockstatustproduct');
+        Route::get('/dashboards/productlock/{id}', [ProductController::class, 'lockstatustproduct'])->name('admin.lockstatustproduct');
+
+        //manager orders
+        Route::resource('/dashboards/orders', OrderController::class);
+        //shiflt order
+        Route::post('/pages/order-details-delivering', [ OrderController::class,'orderDetailsDelivering'])->name('pages.orderdetailsdelivering');
+    });
+    //Support
+    Route::middleware(['auth:sanctum', 'verified','authsupport'])->group(function (){
+        //Galaxy product
+        Route::get('/dashboards/product/galaxys/{id}', [GalaxyController::class, 'galaxys'])->name('product.galaxys');
+        Route::post('/dashboards/product/galaxys/{id}',[GalaxyController::class, 'store'])->name('product.storegalaxy');
+
+        //Sliders
+        Route::resource('/dashboards/sliders', SliderController::class);
+        Route::get('/dashboards/sliderunlock/{id}', [SliderController::class, 'lockstatustslider'])->name('admin.unlockstatustslider');
+        Route::get('/dashboards/sliderlock/{id}', [SliderController::class, 'lockstatustimage'])->name('admin.lockstatustimage');
+        Route::get('/dashboards/speciesunlock/{id}', [SliderController::class, 'unlockspeciesslider'])->name('admin.unlockspeciesslider');
+        Route::get('/dashboards/specieslock/{id}', [SliderController::class, 'lockspeciesslider'])->name('admin.lockspeciesslider');
+
+        //Slider_banner
+        Route::resource('/dashboards/sliderbanner', SliderBannerController::class);
+        Route::get('/dashboards/sliderbannerunlock/{id}', [SliderBannerController::class, 'unlockstatustsliderbanner'])->name('admin.unlockstatustsliderbanner');
+        Route::get('/dashboards/sliderbannerlock/{id}', [SliderBannerController::class, 'lockstatustsliderbanner'])->name('admin.lockstatustsliderbanner');
+        //Coupon
+        Route::resource('/dashboards/coupons', CouponController::class);
+    });
 
     //profile
     Route::get('/dashboards/profile', [UserController::class, 'profile'])->name('user.profile');
@@ -83,43 +129,6 @@ Route::middleware(['auth:sanctum', 'verified','authadmin'])->group(function (){
     //password
     Route::get('/dashboards/password/change', [UserController::class,'getPassword'])->name('user.getpassword');
     Route::post('/dashboards/password/change', [UserController::class,'editPassword'])->name('user.editpassword');
-
-    //category
-    Route::resource('/dashboards/categories', CategoryController::class);
-    Route::get('/dashboards/categoryunlock/{id}', [CategoryController::class, 'unlockstatustcategory'])->name('admin.unlockstatustcategory');
-    Route::get('/dashboards/categorylock/{id}', [CategoryController::class, 'lockstatustcategory'])->name('admin.lockstatustcategory');
-
-    //brand
-    Route::resource('/dashboards/brands',BrandController::class);
-    Route::get('/dashboards/brandunlock/{id}', [BrandController::class, 'unlockstatustbrand'])->name('admin.unlockstatustbrand');
-    Route::get('/dashboards/brandlock/{id}', [BrandController::class, 'lockstatustbrand'])->name('admin.lockstatustbrand');
-
-    //product
-    Route::resource('/dashboards/products', ProductController::class);
-    Route::get('/dashboards/productunlock/{id}', [ProductController::class, 'unlockstatustproduct'])->name('admin.unlockstatustproduct');
-    Route::get('/dashboards/productlock/{id}', [ProductController::class, 'lockstatustproduct'])->name('admin.lockstatustproduct');
-
-    //Galaxy product
-    Route::get('/dashboards/product/galaxys/{id}', [GalaxyController::class, 'galaxys'])->name('product.galaxys');
-    Route::post('/dashboards/product/galaxys/{id}',[GalaxyController::class, 'store'])->name('product.storegalaxy');
-
-    //Sliders
-    Route::resource('/dashboards/sliders', SliderController::class);
-    Route::get('/dashboards/sliderunlock/{id}', [SliderController::class, 'lockstatustslider'])->name('admin.unlockstatustslider');
-    Route::get('/dashboards/sliderlock/{id}', [SliderController::class, 'lockstatustimage'])->name('admin.lockstatustimage');
-    Route::get('/dashboards/speciesunlock/{id}', [SliderController::class, 'unlockspeciesslider'])->name('admin.unlockspeciesslider');
-    Route::get('/dashboards/specieslock/{id}', [SliderController::class, 'lockspeciesslider'])->name('admin.lockspeciesslider');
-
-    //Slider_banner
-    Route::resource('/dashboards/sliderbanner', SliderBannerController::class);
-    Route::get('/dashboards/sliderbannerunlock/{id}', [SliderBannerController::class, 'unlockstatustsliderbanner'])->name('admin.unlockstatustsliderbanner');
-    Route::get('/dashboards/sliderbannerlock/{id}', [SliderBannerController::class, 'lockstatustsliderbanner'])->name('admin.lockstatustsliderbanner');
-    //Coupon
-    Route::resource('/dashboards/coupons', CouponController::class);
-    //manager orders
-    Route::resource('/dashboards/orders', OrderController::class);
-    //shiflt order
-    Route::post('/pages/order-details-delivering', [ OrderController::class,'orderDetailsDelivering'])->name('pages.orderdetailsdelivering');
 
 });
 

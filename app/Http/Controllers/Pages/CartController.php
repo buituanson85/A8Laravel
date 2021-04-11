@@ -19,6 +19,8 @@ class CartController extends Controller
             foreach($cart as $key => $val){
                 if($val['product_id']==$data['cart_product_id']){
                     $is_avaiable++;
+                    $cart[$key]['product_qty'] = $cart[$key]['product_qty'] + 1;
+                    Session::put('cart',$cart);
                 }
             }
             if($is_avaiable == 0){
